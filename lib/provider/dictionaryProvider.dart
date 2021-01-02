@@ -66,6 +66,7 @@ class DictionaryProvider extends ChangeNotifier {
   }
 
   _initiateNepali(io.Directory applicationDirectory) async {
+    
     String dbPathNepali =
         path.join(applicationDirectory.path, "nepaliDictionary.db");
     bool dbExistsNepali = await io.File(dbPathNepali).exists();

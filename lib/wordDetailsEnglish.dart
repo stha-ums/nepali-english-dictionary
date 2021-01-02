@@ -1,6 +1,8 @@
 import 'package:dictionary/provider/dictionaryProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 import 'models/english_words_dictionary.dart';
 
@@ -45,43 +47,54 @@ class _DictionaryAppState extends State<EnglishWordDetails> {
                       const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
-                    color: Colors.white,
                   ),
                   child: Consumer<DictionaryProvider>(
                       builder: (context, data, child) {
                     return GestureDetector(
-                      onTap: (){
-                        Navigator.pop(context);
-                      },
-                      child: TextField(
-                        enabled: false,
-                        decoration: InputDecoration(
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                          hintText: data.selectedDictionary == Dictionary.Nepali
-                              ? "शब्द खोज्नुहोस"
-                              : "Search words",
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide(style: BorderStyle.none)),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(style: BorderStyle.none)),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(style: BorderStyle.none)),
-                          prefixIcon: Icon(
-                            Icons.search,
-                            color: Colors.black54,
-                            size: 20,
-                          ),
-                          suffixIcon: InkWell(
-                            child: Icon(
-                              Icons.clear,
-                              color: Colors.black54,
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: TextField(
+                          enabled: false,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 0, vertical: 0),
+                            hintText:
+                                data.selectedDictionary == Dictionary.Nepali
+                                    ? "शब्द खोज्नुहोस"
+                                    : "Search words",
+                            border: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(style: BorderStyle.none)),
+                            disabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(style: BorderStyle.none)),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(style: BorderStyle.none)),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(style: BorderStyle.none)),
+                            prefixIcon: Icon(
+                              Icons.search,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.light
+                                  ? Colors.black54
+                                  : Colors.white70,
                               size: 20,
                             ),
+                            suffixIcon: InkWell(
+                              child: Icon(
+                                Icons.clear,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.light
+                                    ? Colors.black54
+                                    : Colors.white70,
+                                size: 20,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    );
+                        ));
                   }),
                 ),
               ),
@@ -96,8 +109,9 @@ class _DictionaryAppState extends State<EnglishWordDetails> {
 
 class DetailWordCard extends StatelessWidget {
   final EnglishWord englishWord;
+  final FlutterTts flutterTts = FlutterTts();
 
-  const DetailWordCard({
+  DetailWordCard({
     Key key,
     @required this.englishWord,
   }) : super(key: key);
@@ -123,20 +137,34 @@ class DetailWordCard extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColor),
+                            color: Theme.of(context).accentColor),
                       ),
                       Row(
                         children: [
                           CircleAvatar(
-                            child: Icon(Icons.volume_up),
+                              backgroundColor: Theme.of(context).accentColor,
+                            child: InkWell(
+                                onTap: () async {
+                                  await flutterTts.setLanguage("en");
+                                  await flutterTts.speak(englishWord.enWord);
+                                },
+                                child: Icon(Icons.volume_up)),
                             radius: 18,
                           ),
                           SizedBox(
                             width: 5,
                           ),
-                          CircleAvatar(
-                            child: Icon(Icons.share),
-                            radius: 18,
+                          InkWell(
+                            onTap: () {
+                              Share.share(englishWord.enWord +
+                                  " : \n" +
+                                  englishWord.enDefinition);
+                            },
+                            child: CircleAvatar(
+                              backgroundColor: Theme.of(context).accentColor,
+                              child: Icon(Icons.share),
+                              radius: 18,
+                            ),
                           ),
                         ],
                       ),

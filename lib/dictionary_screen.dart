@@ -1,4 +1,3 @@
-
 import 'package:dictionary/models/english_words_dictionary.dart';
 import 'package:dictionary/provider/dictionaryProvider.dart';
 import 'package:dictionary/wordDetail.dart';
@@ -34,19 +33,19 @@ class _DictionaryAppState extends State<DictionaryApp> {
 
   _searchAndJump(String searchedString, BuildContext context) async {
     if (Provider.of<DictionaryProvider>(context, listen: false)
-        .selectedDictionary ==
+            .selectedDictionary ==
         Dictionary.Nepali) {
       Word searchedFirst =
-      await Provider.of<DictionaryProvider>(context, listen: false)
-          .searchTheDictionaryNepali(NepaliUnicode.convert(searchedString));
+          await Provider.of<DictionaryProvider>(context, listen: false)
+              .searchTheDictionaryNepali(NepaliUnicode.convert(searchedString));
 
       if (searchedFirst != null) {
         itemScrollController.jumpTo(index: searchedFirst.id - 1);
       }
     } else {
       EnglishWord searchedFirstEnglish =
-      await Provider.of<DictionaryProvider>(context, listen: false)
-          .searchTheDictionaryEnglish(searchedString);
+          await Provider.of<DictionaryProvider>(context, listen: false)
+              .searchTheDictionaryEnglish(searchedString);
       if (searchedFirstEnglish != null) {
         itemScrollController.jumpTo(index: searchedFirstEnglish.rowid - 1);
       }
@@ -61,7 +60,7 @@ class _DictionaryAppState extends State<DictionaryApp> {
         return Scaffold(
           appBar: AppBar(
             title:
-            Consumer<DictionaryProvider>(builder: (context, data, child) {
+                Consumer<DictionaryProvider>(builder: (context, data, child) {
               return Text(data.selectedDictionary == Dictionary.Nepali
                   ? "नेपाली शब्दकोष"
                   : "English Dictionary");
@@ -87,53 +86,58 @@ class _DictionaryAppState extends State<DictionaryApp> {
               child: Container(
                 height: 40,
                 margin:
-                const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
-                  color: Colors.white,
                 ),
                 child: Consumer<DictionaryProvider>(
                     builder: (context, data, child) {
-                      return TextField(
-                          focusNode: focusNode,
-                          controller: searchController,
-                          decoration: InputDecoration(
-                            contentPadding:
+                  return TextField(
+                      focusNode: focusNode,
+                      controller: searchController,
+                      decoration: InputDecoration(
+                        contentPadding:
                             EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                            hintText: data.selectedDictionary == Dictionary.Nepali
-                                ? "शब्द खोज्नुहोस"
-                                : "Search words",
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide(style: BorderStyle.none)),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(style: BorderStyle.none)),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(style: BorderStyle.none)),
-                            prefixIcon: Icon(
-                              Icons.search,
-                              color: Colors.black54,
-                              size: 20,
-                            ),
-                            suffixIcon: InkWell(
-                              child: Icon(
-                                Icons.clear,
-                                color: Colors.black54,
-                                size: 20,
-                              ),
-                              onTap: () {
-                                searchController.clear();
-                                itemScrollController.jumpTo(index: 0);
-                              },
-                            ),
+                        hintText: data.selectedDictionary == Dictionary.Nepali
+                            ? "शब्द खोज्नुहोस"
+                            : "Search words",
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(style: BorderStyle.none)),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(style: BorderStyle.none)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(style: BorderStyle.none)),
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? Colors.black54
+                                  : Colors.white70,
+                          size: 20,
+                        ),
+                        suffixIcon: InkWell(
+                          child: Icon(
+                            Icons.clear,
+                            color:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Colors.black54
+                                    : Colors.white70,
+                            size: 20,
                           ),
-                          onChanged: (value) {
-                            if (value.trim().length > 0)
-                              _searchAndJump(value, context);
-                            else {
-                              itemScrollController.jumpTo(index: 0);
-                            }
-                          });
-                    }),
+                          onTap: () {
+                            searchController.clear();
+                            itemScrollController.jumpTo(index: 0);
+                          },
+                        ),
+                      ),
+                      onChanged: (value) {
+                        if (value.trim().length > 0)
+                          _searchAndJump(value, context);
+                        else {
+                          itemScrollController.jumpTo(index: 0);
+                        }
+                      });
+                }),
               ),
             ),
           ),
@@ -142,27 +146,27 @@ class _DictionaryAppState extends State<DictionaryApp> {
               if (dictionaryData.selectedDictionary == Dictionary.Nepali)
                 return dictionaryData.allDictionaryWordsNepali == null
                     ? Center(
-                  child: CircularProgressIndicator(),
-                )
+                        child: CircularProgressIndicator(),
+                      )
                     : ListOfWords(
-                  itemPositionsListener: itemPositionsListener,
-                  itemScrollController: itemScrollController,
-                  requestFocus: () {
-                    FocusScope.of(context).requestFocus(focusNode);
-                  },
-                );
+                        itemPositionsListener: itemPositionsListener,
+                        itemScrollController: itemScrollController,
+                        requestFocus: () {
+                          FocusScope.of(context).requestFocus(focusNode);
+                        },
+                      );
               else
                 return dictionaryData.allDictionaryWordsEnglish == null
                     ? Center(
-                  child: CircularProgressIndicator(),
-                )
+                        child: CircularProgressIndicator(),
+                      )
                     : ListOfWords(
-                  itemPositionsListener: itemPositionsListener,
-                  itemScrollController: itemScrollController,
-                  requestFocus: () {
-                    FocusScope.of(context).requestFocus(focusNode);
-                  },
-                );
+                        itemPositionsListener: itemPositionsListener,
+                        itemScrollController: itemScrollController,
+                        requestFocus: () {
+                          FocusScope.of(context).requestFocus(focusNode);
+                        },
+                      );
             },
           ),
         );
@@ -189,23 +193,23 @@ class ListOfWords extends StatelessWidget {
     return ScrollablePositionedList.builder(
       physics: ClampingScrollPhysics(),
       itemCount: Provider.of<DictionaryProvider>(context, listen: false)
-          .selectedDictionary ==
-          Dictionary.Nepali
+                  .selectedDictionary ==
+              Dictionary.Nepali
           ? Provider.of<DictionaryProvider>(context, listen: false)
-          .allDictionaryWordsNepali
-          .length
+              .allDictionaryWordsNepali
+              .length
           : Provider.of<DictionaryProvider>(context, listen: false)
-          .allDictionaryWordsEnglish
-          .length,
+              .allDictionaryWordsEnglish
+              .length,
       itemScrollController: itemScrollController,
       itemPositionsListener: itemPositionsListener,
       itemBuilder: (context, index) {
         if (Provider.of<DictionaryProvider>(context, listen: false)
-            .selectedDictionary ==
+                .selectedDictionary ==
             Dictionary.Nepali) {
           Word wordModel =
-          Provider.of<DictionaryProvider>(context, listen: false)
-              .allDictionaryWordsNepali[index];
+              Provider.of<DictionaryProvider>(context, listen: false)
+                  .allDictionaryWordsNepali[index];
 
           List<Definition> definitions;
           List<Example> examples;
@@ -246,19 +250,19 @@ class ListOfWords extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).primaryColor),
+                                    color: Theme.of(context).accentColor),
                               ),
                               Text(
                                 "/" + wordModel.partOfSpeech + "/",
                                 style: TextStyle(
                                     fontStyle: FontStyle.italic,
-                                    color: Theme.of(context).primaryColor),
+                                    color: Theme.of(context).accentColor),
                               ),
                               Text(""),
                               FutureBuilder<List<Definition>>(
                                   future: Provider.of<DictionaryProvider>(
-                                      context,
-                                      listen: false)
+                                          context,
+                                          listen: false)
                                       .getDefinitions(wordModel.id),
                                   builder: (context, snapshot) {
                                     if (snapshot.data != null) {
@@ -268,78 +272,78 @@ class ListOfWords extends StatelessWidget {
                                       definitions = snapshot.data;
                                       return Column(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                              MainAxisAlignment.start,
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           children: snapshot.data
                                               .asMap()
                                               .entries
                                               .map((def) => Column(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment
-                                                .start,
-                                            children: [
-                                              Text(
-                                                (def.key + 1)
-                                                    .toString() +
-                                                    '. ' +
-                                                    def.value.value,
-                                              ),
-                                              Padding(
-                                                padding:
-                                                const EdgeInsets
-                                                    .all(8.0),
-                                                child: FutureBuilder<
-                                                    List<Example>>(
-                                                    future: Provider.of<
-                                                        DictionaryProvider>(
-                                                        context,
-                                                        listen:
-                                                        false)
-                                                        .getExamples(def
-                                                        .value.id),
-                                                    builder: (context,
-                                                        snapshot) {
-                                                      if (snapshot
-                                                          .data !=
-                                                          null) {
-                                                        if (snapshot
-                                                            .data
-                                                            .isEmpty) {
-                                                          return Text(
-                                                              "N/A");
-                                                        }
-                                                        examples =
-                                                            snapshot
-                                                                .data;
-                                                        return Column(
-                                                            mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                            crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                            children:
-                                                            snapshot
-                                                                .data
-                                                                .map((exp) {
-                                                              return Column(
-                                                                children: [
-                                                                  Text(
-                                                                    '· ' +
-                                                                        exp.value,
-                                                                  ),
-                                                                ],
-                                                              );
-                                                            }).toList());
-                                                      } else
-                                                        return Container();
-                                                    }),
-                                              ),
-                                            ],
-                                          ))
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        (def.key + 1)
+                                                                .toString() +
+                                                            '. ' +
+                                                            def.value.value,
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: FutureBuilder<
+                                                                List<Example>>(
+                                                            future: Provider.of<
+                                                                        DictionaryProvider>(
+                                                                    context,
+                                                                    listen:
+                                                                        false)
+                                                                .getExamples(def
+                                                                    .value.id),
+                                                            builder: (context,
+                                                                snapshot) {
+                                                              if (snapshot
+                                                                      .data !=
+                                                                  null) {
+                                                                if (snapshot
+                                                                    .data
+                                                                    .isEmpty) {
+                                                                  return Text(
+                                                                      "N/A");
+                                                                }
+                                                                examples =
+                                                                    snapshot
+                                                                        .data;
+                                                                return Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .start,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children:
+                                                                        snapshot
+                                                                            .data
+                                                                            .map((exp) {
+                                                                      return Column(
+                                                                        children: [
+                                                                          Text(
+                                                                            '· ' +
+                                                                                exp.value,
+                                                                          ),
+                                                                        ],
+                                                                      );
+                                                                    }).toList());
+                                                              } else
+                                                                return Container();
+                                                            }),
+                                                      ),
+                                                    ],
+                                                  ))
                                               .toList());
                                     } else
                                       return Container();
@@ -352,7 +356,7 @@ class ListOfWords extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  color: Colors.black12,
+                  color:Theme.of(context).brightness == Brightness.light? Colors.black12: Colors.white12,
                   height: 1,
                 )
               ],
@@ -360,8 +364,8 @@ class ListOfWords extends StatelessWidget {
           );
         } else {
           EnglishWord englishWord =
-          Provider.of<DictionaryProvider>(context, listen: false)
-              .allDictionaryWordsEnglish[index];
+              Provider.of<DictionaryProvider>(context, listen: false)
+                  .allDictionaryWordsEnglish[index];
           return Container(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -396,7 +400,7 @@ class ListOfWords extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).primaryColor),
+                                    color: Theme.of(context).accentColor),
                               ),
                               SizedBox(
                                 height: 10,
@@ -410,14 +414,14 @@ class ListOfWords extends StatelessWidget {
                                 children: [
                                   englishWord.example.trim() == "NA"
                                       ? Text(
-                                    "e.g.",
-                                    style: TextStyle(
-                                        fontStyle: FontStyle.italic),
-                                  )
+                                          "e.g.",
+                                          style: TextStyle(
+                                              fontStyle: FontStyle.italic),
+                                        )
                                       : Container(
-                                    width: 1,
-                                    color: Colors.black12,
-                                  ),
+                                          width: 1,
+                                          color: Colors.black12,
+                                        ),
                                   SizedBox(
                                     width: 10,
                                   ),
@@ -433,22 +437,22 @@ class ListOfWords extends StatelessWidget {
                               ),
                               (englishWord.synonyms != "NA")
                                   ? Text(
-                                'Synonyms: ' + englishWord.synonyms,
-                                style: TextStyle(
-                                    fontStyle: FontStyle.italic),
-                              )
+                                      'Synonyms: ' + englishWord.synonyms,
+                                      style: TextStyle(
+                                          fontStyle: FontStyle.italic),
+                                    )
                                   : Container(),
                               SizedBox(
                                 height: 5,
                               ),
                               (englishWord.antonyms != "NA")
                                   ? Text(
-                                ''
-                                    'Antonyms: ' +
-                                    englishWord.antonyms,
-                                style: TextStyle(
-                                    fontStyle: FontStyle.italic),
-                              )
+                                      ''
+                                              'Antonyms: ' +
+                                          englishWord.antonyms,
+                                      style: TextStyle(
+                                          fontStyle: FontStyle.italic),
+                                    )
                                   : Container(),
                             ],
                           ),
@@ -458,7 +462,8 @@ class ListOfWords extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  color: Colors.black12,
+                  color:Theme.of(context).brightness == Brightness.light? Colors.black12: Colors.white12,
+
                   height: 1,
                 )
               ],
